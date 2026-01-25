@@ -5,7 +5,12 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
-
+	ssr: {
+		noExternal: ['postgres'] // Force postgres to be bundled
+	},
+	optimizeDeps: {
+		exclude: ['postgres']
+	},
 	test: {
 		expect: { requireAssertions: true },
 

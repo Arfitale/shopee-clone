@@ -1,8 +1,6 @@
 import type { Config } from "drizzle-kit";
 import "dotenv/config";
 
-console.log(process.env.DATABASE_URL);
-
 export default {
   schema: "./schema.ts",
   out: "./migrations",
@@ -10,6 +8,7 @@ export default {
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },
+  schemaFilter: ["public"],
   strict: true,
   verbose: true,
 } satisfies Config;

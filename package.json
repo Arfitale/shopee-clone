@@ -16,11 +16,16 @@
   ],
   "scripts": {
     "db:generate": "cd packages/db && drizzle-kit generate",
-    "db:migrate": "cd packages/db && drizzle-kit migrate"
+    "db:migrate": "cd packages/db && drizzle-kit migrate",
+    "db:push": "cd packages/db && drizzle-kit push"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.11.1",
+    "@auth/sveltekit": "^1.11.1",
+    "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.6.2",
     "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.8"
   }
 }

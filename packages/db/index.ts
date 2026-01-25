@@ -1,10 +1,17 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+
+// Import everything from schema
 import * as schema from "./schema";
 
-const connectionString = process.env.DATABASE_URL!;
-const client = postgres(connectionString, {
-  max: 1,
-});
+export function createDb(connectionString: string) {
+  const client = postgres(connectionString, {
+    max: 1,
+  });
 
-export const db = drizzle(client, { schema });
+  return drizzle(client, { schema });
+}
+
+// Re-export schema properly
+export * from "./schema";
+export { schema };
