@@ -17,24 +17,24 @@ export const actions = {
 		const email = data.get('email')?.toString().trim().toLowerCase();
 		const password = data.get('password')?.toString().trim();
 
-		// Validate input
-		if (!email || !password) {
-			return fail(400, { error: 'require email and password' });
-		}
-
-		// Check if user exists
-		const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1);
-		if (!user) {
-			return fail(404, { error: 'User not found' });
-		}
-
-		const isPasswordValid = await verifyPassword(user.passwordHash, password);
-
-		if (!isPasswordValid) {
-			return fail(401, { error: 'Invalid password' });
-		}
-
 		try {
+			// Validate input
+			if (!email || !password) {
+				return fail(400, { error: 'require email and password' });
+			}
+
+			// Check if user exists
+			const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1);
+			if (!user) {
+				return fail(404, { error: 'User not found' });
+			}
+
+			const isPasswordValid = await verifyPassword(user.passwordHash, password);
+
+			if (!isPasswordValid) {
+				return fail(401, { error: 'Invalid password' });
+			}
+
 			// Create session
 			const session = await lucia.createSession(user.id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);

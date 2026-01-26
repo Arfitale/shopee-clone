@@ -17,6 +17,8 @@ export const actions = {
 		const email = data.get('email')?.toString().trim().toLowerCase();
 		const password = data.get('password')?.toString().trim();
 
+		console.log(data, email, password);
+
 		// Validate input
 		if (!email || !password) {
 			return fail(400, { error: 'require email and password' });
