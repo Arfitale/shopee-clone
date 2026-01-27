@@ -22,11 +22,16 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@auth/sveltekit": "^1.11.1",
+    "add": "^2.0.6",
     "arctic": "^3.7.0",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.6.2",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
-    "postgres": "^3.4.8"
+    "postgres": "^3.4.8",
+    "prettier": "^3.8.1",
+    "prettier-plugin-svelte": "^3.4.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "sv": "^0.11.4"
   }
 }
