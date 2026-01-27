@@ -2,9 +2,9 @@ import {
   pgTable,
   uuid,
   text,
-  integer,
   pgEnum,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { createdAtNow } from "./schema-helper";
 
@@ -15,23 +15,54 @@ export const orderStatusEnum = pgEnum("order_status", [
   "PAID",
   "CANCELLED",
 ]);
+export const oauthProviderEnum = pgEnum("oauth_provider", [
+  "GOOGLE",
+  "GITHUB",
+  "FACEBOOK",
+]);
 
 /* USERS */
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").notNull().unique(),
-  passwordHash: text("password_hash").notNull(),
+  passwordHash: text("password_hash"),
   role: userRoleEnum("role").notNull().default("USER"),
   createdAt: createdAtNow,
 });
 
 export const sessions = pgTable("sessions", {
-  id: text("id").primaryKey(),
+  id: text("id").primaryKey(), // Lucia uses string IDs for sessions
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
 });
+
+export const authProviders = pgTable(
+  "auth_providers",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    provider: text("provider").notNull(), // google, github, etc
+    providerUserId: text("provider_user_id").notNull(),
+
+    createdAt: createdAtNow,
+  },
+  (t) => [
+    // Prevent same provider account from being linked twice
+    uniqueIndex("auth_providers_provider_user_unique").on(
+      t.provider,
+      t.providerUserId,
+    ),
+
+    // Optional: prevent user from linking same provider twice
+    uniqueIndex("auth_providers_user_provider_unique").on(t.userId, t.provider),
+  ],
+);
 
 // /* PRODUCTS */
 // export const products = pgTable("products", {
@@ -76,3 +107,5 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferSelect;
 export type NewSession = typeof sessions.$inferInsert;
+export type AuthProvider = typeof authProviders.$inferSelect;
+export type NewAuthProvider = typeof authProviders.$inferInsert;

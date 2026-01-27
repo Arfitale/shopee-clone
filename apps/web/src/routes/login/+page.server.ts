@@ -29,8 +29,13 @@ export const actions = {
 				return fail(404, { error: 'User not found' });
 			}
 
-			const isPasswordValid = await verifyPassword(user.passwordHash, password);
+			// Check if password login is available
+			if (!user.passwordHash) {
+				return fail(401, { error: 'Password login not available. Please use OAuth login.' });
+			}
 
+			// Verify password
+			const isPasswordValid = await verifyPassword(user.passwordHash, password);
 			if (!isPasswordValid) {
 				return fail(401, { error: 'Invalid password' });
 			}
