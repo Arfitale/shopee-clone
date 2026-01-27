@@ -5,6 +5,7 @@ import {
   pgEnum,
   timestamp,
   uniqueIndex,
+  integer,
 } from "drizzle-orm/pg-core";
 import { createdAtNow } from "./schema-helper";
 
@@ -65,18 +66,18 @@ export const authProviders = pgTable(
 );
 
 // /* PRODUCTS */
-// export const products = pgTable("products", {
-//   id: uuid("id").defaultRandom().primaryKey(),
-//   sellerId: uuid("seller_id")
-//     .notNull()
-//     .references(() => users.id, { onDelete: "cascade" }),
-//   name: text("name").notNull(),
-//   description: text("description"),
-//   price: integer("price").notNull(),
-//   stock: integer("stock").notNull(),
-//   isActive: integer("is_active").default(1).notNull(),
-//   createdAt: createdAtNow,
-// });
+export const products = pgTable("products", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sellerId: uuid("seller_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  price: integer("price").notNull(),
+  stock: integer("stock").notNull(),
+  isActive: integer("is_active").default(1).notNull(),
+  createdAt: createdAtNow,
+});
 
 // /* ORDERS */
 // export const orders = pgTable("orders", {
@@ -109,3 +110,5 @@ export type Session = typeof sessions.$inferSelect;
 export type NewSession = typeof sessions.$inferInsert;
 export type AuthProvider = typeof authProviders.$inferSelect;
 export type NewAuthProvider = typeof authProviders.$inferInsert;
+export type Product = typeof products.$inferSelect;
+export type NewProduct = typeof products.$inferInsert;
