@@ -10,6 +10,6 @@ export const load = async () => {
 			stock: products.stock
 		})
 		.from(products)
-		.where(eq(products.isActive, 1));
+		.where(eq(products.isActive, true));
 	return { products: items };
 };

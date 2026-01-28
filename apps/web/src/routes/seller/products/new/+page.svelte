@@ -85,6 +85,7 @@
               placeholder="e.g. Mechanical Keyboard"
               required
               minlength={3}
+              name="product-name"
               />
             </label>
           </div>
@@ -97,6 +98,7 @@
               <Textarea
               rows={4}
               placeholder="Describe your product in detail..."
+              name="description"
               />
             </label>
           </div>
@@ -111,6 +113,7 @@
                 min={0}
                 placeholder="100000"
                 required
+                name="price"
                 />
               </label>
               </div>
@@ -122,6 +125,7 @@
                 type="number"
                 min="0"
                 placeholder="10"
+                name="stock"
                 />
               </label>
               </div>

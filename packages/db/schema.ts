@@ -6,6 +6,7 @@ import {
   timestamp,
   uniqueIndex,
   integer,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { createdAtNow } from "./schema-helper";
 
@@ -75,7 +76,7 @@ export const products = pgTable("products", {
   description: text("description"),
   price: integer("price").notNull(),
   stock: integer("stock").notNull(),
-  isActive: integer("is_active").default(1).notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
   createdAt: createdAtNow,
 });
 
