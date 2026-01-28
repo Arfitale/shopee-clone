@@ -80,6 +80,24 @@ export const products = pgTable("products", {
   createdAt: createdAtNow,
 });
 
+export const cartItems = pgTable(
+  "cart_items",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    quantity: integer("quantity").notNull().default(1),
+    createdAt: createdAtNow,
+  },
+  (table) => [
+    uniqueIndex("cart_user_product_unique").on(table.userId, table.productId),
+  ],
+);
+
 // /* ORDERS */
 // export const orders = pgTable("orders", {
 //   id: uuid("id").defaultRandom().primaryKey(),
