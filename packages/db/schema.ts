@@ -131,3 +131,5 @@ export type AuthProvider = typeof authProviders.$inferSelect;
 export type NewAuthProvider = typeof authProviders.$inferInsert;
 export type Product = typeof products.$inferSelect;
 export type NewProduct = typeof products.$inferInsert;
+export type CartItem = typeof cartItems.$inferSelect;
+export type NewCartItem = typeof cartItems.$inferInsert;
