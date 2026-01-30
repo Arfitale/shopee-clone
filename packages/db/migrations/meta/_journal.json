@@ -43,6 +43,13 @@
       "when": 1769575915635,
       "tag": "0005_skinny_screwball",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1769727175945,
+      "tag": "0006_perfect_daredevil",
+      "breakpoints": true
     }
   ]
 }

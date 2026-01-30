@@ -98,30 +98,30 @@ export const cartItems = pgTable(
   ],
 );
 
-// /* ORDERS */
-// export const orders = pgTable("orders", {
-//   id: uuid("id").defaultRandom().primaryKey(),
-//   buyerId: uuid("buyer_id")
-//     .notNull()
-//     .references(() => users.id),
-//   totalAmount: integer("total_amount").notNull(),
-//   status: orderStatusEnum("status").notNull(),
-//   createdAt: createdAtNow,
-// });
+/* ORDERS */
+export const orders = pgTable("orders", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  totalAmount: integer("total_amount").notNull(),
+  status: orderStatusEnum("status").notNull().default("PENDING"),
+  createdAt: createdAtNow,
+});
 
 // /* ORDER ITEMS */
-// export const orderItems = pgTable("order_items", {
-//   id: uuid("id").defaultRandom().primaryKey(),
-//   orderId: uuid("order_id")
-//     .notNull()
-//     .references(() => orders.id, { onDelete: "cascade" }),
-//   productId: uuid("product_id")
-//     .notNull()
-//     .references(() => products.id),
-//   productName: text("product_name").notNull(),
-//   price: integer("price").notNull(),
-//   quantity: integer("quantity").notNull(),
-// });
+export const orderItems = pgTable("order_items", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orderId: uuid("order_id")
+    .notNull()
+    .references(() => orders.id, { onDelete: "cascade" }),
+  productId: uuid("product_id")
+    .notNull()
+    .references(() => products.id),
+  productName: text("product_name").notNull(),
+  price: integer("price").notNull(),
+  quantity: integer("quantity").notNull(),
+});
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -133,3 +133,5 @@ export type Product = typeof products.$inferSelect;
 export type NewProduct = typeof products.$inferInsert;
 export type CartItem = typeof cartItems.$inferSelect;
 export type NewCartItem = typeof cartItems.$inferInsert;
+export type Order = typeof orders.$inferSelect;
+export type NewOrder = typeof orders.$inferInsert;
