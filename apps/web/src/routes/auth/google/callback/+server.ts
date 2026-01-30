@@ -4,7 +4,7 @@ import { redirect, error } from '@sveltejs/kit';
 import { googleProvider } from '$lib/server/oauth/google.js';
 import { authProviders, db, users } from '$lib/db.js';
 
-export async function GET({ url, cookies }) {
+export async function GET({ url, cookies, fetch }) {
 	const code = url.searchParams.get('code');
 	const state = url.searchParams.get('state');
 
