@@ -50,6 +50,13 @@
       "when": 1769727175945,
       "tag": "0006_perfect_daredevil",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1769758969877,
+      "tag": "0007_clammy_naoko",
+      "breakpoints": true
     }
   ]
 }

@@ -17,6 +17,11 @@ export const orderStatusEnum = pgEnum("order_status", [
   "PAID",
   "CANCELLED",
 ]);
+export const orderItemStatusEnum = pgEnum("order_item_status", [
+  "PENDING",
+  "PACKED",
+  "SHIPPED",
+]);
 export const oauthProviderEnum = pgEnum("oauth_provider", [
   "GOOGLE",
   "GITHUB",
@@ -121,6 +126,8 @@ export const orderItems = pgTable("order_items", {
   productName: text("product_name").notNull(),
   price: integer("price").notNull(),
   quantity: integer("quantity").notNull(),
+  status: orderItemStatusEnum("status").notNull().default("PENDING"),
+  createdAt: createdAtNow,
 });
 
 export type User = typeof users.$inferSelect;
@@ -135,3 +142,5 @@ export type CartItem = typeof cartItems.$inferSelect;
 export type NewCartItem = typeof cartItems.$inferInsert;
 export type Order = typeof orders.$inferSelect;
 export type NewOrder = typeof orders.$inferInsert;
+export type OrderItem = typeof orderItems.$inferSelect;
+export type NewOrderItem = typeof orderItems.$inferInsert;
