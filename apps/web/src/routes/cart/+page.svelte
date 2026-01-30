@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Button from '$lib/components/ui/button/button.svelte';
     import { TrashIcon } from '@lucide/svelte';
 
     const {data} = $props();
@@ -112,11 +113,9 @@
           </span>
         </div>
 
-        <button
-          class="w-full rounded-md bg-black px-4 py-3 text-sm font-medium text-white hover:bg-black/90"
-        >
+        <Button href="/checkout" class="w-full">
           Checkout
-        </button>
+        </Button>
       </div>
     </div>
   {/if}
