@@ -4,7 +4,7 @@ import { db, products } from '$lib/db';
 
 export const load = async ({ locals }) => {
 	const user = await locals.user;
-	if (!user || !user.isSeller) {
+	if (!user || user.role !== 'SELLER') {
 		throw redirect(302, '/login');
 	}
 };
