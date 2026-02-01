@@ -1,5 +1,5 @@
 import { db, products } from '$lib/db';
-import { eq } from 'drizzle-orm';
+import { and, eq, gt } from 'drizzle-orm';
 
 export const load = async () => {
 	const items = await db
@@ -10,6 +10,6 @@ export const load = async () => {
 			stock: products.stock
 		})
 		.from(products)
-		.where(eq(products.isActive, true));
+		.where(and(eq(products.isActive, true), gt(products.stock, 0)));
 	return { products: items };
 };
