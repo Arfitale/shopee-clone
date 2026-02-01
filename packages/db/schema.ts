@@ -15,6 +15,8 @@ export const userRoleEnum = pgEnum("user_role", ["USER", "SELLER"]);
 export const orderStatusEnum = pgEnum("order_status", [
   "PENDING",
   "PAID",
+  "PROCESSING",
+  "SHIPPED",
   "CANCELLED",
 ]);
 export const orderItemStatusEnum = pgEnum("order_item_status", [
@@ -144,3 +146,6 @@ export type Order = typeof orders.$inferSelect;
 export type NewOrder = typeof orders.$inferInsert;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type NewOrderItem = typeof orderItems.$inferInsert;
+
+export type OrderStatus = (typeof orderStatusEnum.enumValues)[number];
+export type OrderItemStatus = (typeof orderItemStatusEnum.enumValues)[number];

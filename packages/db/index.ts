@@ -12,6 +12,9 @@ export function createDb(connectionString: string) {
   return drizzle(client, { schema });
 }
 
+export const db = createDb(process.env.DATABASE_URL!);
+
 // Re-export schema properly
 export * from "./schema";
+export * from "./helpers/order-status";
 export { schema };

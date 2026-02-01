@@ -2,9 +2,7 @@ import "dotenv/config";
 import { users, products } from "./schema";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
-import { createDb } from ".";
-
-export const db = createDb(process.env.DATABASE_URL!);
+import { db } from ".";
 
 async function seed() {
   console.log("🌱 Seeding database...");
