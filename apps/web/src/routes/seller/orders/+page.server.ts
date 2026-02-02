@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
 import { orderItems, orders, products } from '$lib/db';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, sql } from 'drizzle-orm';
 import { syncOrderStatus } from '$lib/db';
 import type { OrderItemStatus } from '$lib/db';
 
@@ -43,14 +43,31 @@ export const actions = {
 		if (!orderItemId || !status) return;
 
 		await db.transaction(async (tx) => {
-			// 1. Update order item
-			const [item] = await tx
+			let [item] = await tx
+				.select()
+				.from(orderItems)
+				.where(eq(orderItems.id, orderItemId))
+				.limit(1);
+
+			if (item.status === 'CANCELLED') {
+				return;
+			}
+
+			[item] = await tx
 				.update(orderItems)
 				.set({ status })
 				.where(eq(orderItems.id, orderItemId))
-				.returning({ orderId: orderItems.orderId });
+				.returning();
 
-			// 2. Sync parent order status
+			if (status === 'CANCELLED') {
+				await tx
+					.update(products)
+					.set({
+						stock: sql`${products.stock} + ${item.quantity}`
+					})
+					.where(eq(products.id, item.productId));
+			}
+
 			await syncOrderStatus(tx, item.orderId);
 		});
 	}

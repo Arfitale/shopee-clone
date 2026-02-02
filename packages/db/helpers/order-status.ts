@@ -19,10 +19,14 @@ export async function syncOrderStatus(
   const statuses = items.map((i) => i.status);
   let orderStatus: OrderStatus = "PAID";
 
-  if (statuses.every((status) => status === "SHIPPED")) {
+  if (statuses.every((s) => s === "CANCELLED")) {
+    orderStatus = "CANCELLED";
+  } else if (statuses.every((s) => s === "SHIPPED")) {
     orderStatus = "SHIPPED";
-  } else if (statuses.some((status) => status !== "PENDING")) {
+  } else if (statuses.some((s) => s !== "PENDING")) {
     orderStatus = "PROCESSING";
+  } else {
+    orderStatus = "PAID";
   }
 
   await tx

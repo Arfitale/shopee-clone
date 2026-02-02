@@ -1,0 +1,1 @@
+ALTER TYPE "public"."order_item_status" ADD VALUE 'CANCELLED';

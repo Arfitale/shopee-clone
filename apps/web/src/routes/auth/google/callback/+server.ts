@@ -59,7 +59,7 @@ export async function GET({ url, cookies, fetch }) {
 		// 🔗 Link provider to user
 		await db.insert(authProviders).values({
 			userId: existingUser.id,
-			provider: 'google',
+			provider: 'GOOGLE',
 			providerUserId: googleUser.id
 		});
 

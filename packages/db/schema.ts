@@ -23,6 +23,7 @@ export const orderItemStatusEnum = pgEnum("order_item_status", [
   "PENDING",
   "PACKED",
   "SHIPPED",
+  "CANCELLED",
 ]);
 export const oauthProviderEnum = pgEnum("oauth_provider", [
   "GOOGLE",

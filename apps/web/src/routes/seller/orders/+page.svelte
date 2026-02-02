@@ -34,21 +34,24 @@
 							Status: <strong>{item.status}</strong>
 						</span>
 
-						<form method="POST" action="?/updateStatus">
-							<input type="hidden" name="orderItemId" value={item.orderItemId} />
-							<select
-								name="status"
-								class="rounded border px-2 py-1 text-xs"
-								value={item.status ?? 'PENDING'}
-							>
-								<option value="PENDING">Pending</option>
-								<option value="PACKED">Packed</option>
-								<option value="SHIPPED">Shipped</option>
-							</select>
-							<button type="submit" class="ml-2 rounded bg-black px-3 py-1 text-xs text-white">
-								Update
-							</button>
-						</form>
+						{#if item.status !== 'CANCELLED'}
+							<form method="POST" action="?/updateStatus">
+								<input type="hidden" name="orderItemId" value={item.orderItemId} />
+								<select
+									name="status"
+									class="rounded border px-2 py-1 text-xs"
+									value={item.status ?? 'PENDING'}
+								>
+									<option value="PENDING">Pending</option>
+									<option value="PACKED">Packed</option>
+									<option value="SHIPPED">Shipped</option>
+									<option value="CANCELLED">Cancelled</option>
+								</select>
+								<button type="submit" class="ml-2 rounded bg-black px-3 py-1 text-xs text-white">
+									Update
+								</button>
+							</form>
+						{/if}
 					</div>
 				</div>
 			{/each}

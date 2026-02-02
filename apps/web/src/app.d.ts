@@ -1,10 +1,13 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
+
+import type { User } from '$lib/db';
+
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: import('lucia').UserAttributes | null;
+			user: User;
 			session: import('lucia').SessionAttributes | null;
 		}
 		// interface PageData {}

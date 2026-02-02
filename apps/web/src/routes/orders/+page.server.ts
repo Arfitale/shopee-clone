@@ -1,7 +1,7 @@
-import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import { orders, orderItems, products, db } from '$lib/db';
-import { eq, desc, inArray } from 'drizzle-orm';
+import { eq, desc, inArray, sql } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
@@ -48,3 +48,72 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}))
 	};
 };
+
+export const actions = {
+	cancelOrder: async ({ locals, request }) => {
+		const data = request.formData();
+		const orderId = (await data).get('orderId') as string;
+
+		if (!locals.user) {
+			throw redirect(303, '/');
+		}
+
+		if (!orderId) {
+			throw fail(500, { error: 'invalid order id' });
+		}
+
+		try {
+			await db.transaction(async (tx) => {
+				const [order] = await tx.select().from(orders).where(eq(orders.id, orderId)).for('update');
+
+				if (!order || order.userId !== locals.user.id) {
+					throw new Error('Order not found');
+				}
+
+				if (order.status === 'SHIPPED') {
+					throw new Error('Order already shipped');
+				}
+
+				const items = await tx
+					.select({
+						productId: orderItems.productId,
+						quantity: orderItems.quantity,
+						status: orderItems.status
+					})
+					.from(orderItems)
+					.where(eq(orderItems.orderId, orderId))
+					.for('update');
+
+				if (items.some((item) => item.status === 'SHIPPED')) {
+					throw new Error('Some items already shipped');
+				}
+
+				for (const item of items) {
+					if (item.status === 'CANCELLED') {
+						continue;
+					}
+
+					await tx
+						.update(products)
+						.set({
+							stock: sql`${products.stock} + ${item.quantity}`
+						})
+						.where(eq(products.id, item.productId));
+				}
+
+				await tx
+					.update(orderItems)
+					.set({ status: 'CANCELLED' })
+					.where(eq(orderItems.orderId, orderId));
+
+				await tx.update(orders).set({ status: 'CANCELLED' }).where(eq(orders.id, orderId));
+			});
+		} catch (err) {
+			return fail(400, {
+				error: err instanceof Error ? err.message : 'Cancellation failed'
+			});
+		}
+
+		throw redirect(302, '/orders');
+	}
+} satisfies Actions;
