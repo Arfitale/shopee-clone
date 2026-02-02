@@ -30,6 +30,8 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	confirm: async ({ locals }) => {
+		console.log(true);
+
 		if (!locals.user) {
 			throw redirect(302, '/login');
 		}
