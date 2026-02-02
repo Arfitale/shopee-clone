@@ -1,122 +1,201 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte';
-    import { TrashIcon } from '@lucide/svelte';
+	import { Button } from '$lib/components/ui/button';
+	import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
+	import { Separator } from '$lib/components/ui/separator';
+	import { Badge } from '$lib/components/ui/badge';
+	import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from '@lucide/svelte';
+	import { enhance } from '$app/forms';
 
-    const {data} = $props();
+	let { data } = $props();
+
+	const formatPrice = (price: number) => {
+		return new Intl.NumberFormat('id-ID', {
+			style: 'currency',
+			currency: 'IDR',
+			minimumFractionDigits: 0
+		}).format(price);
+	};
+
+	const totalItems = $derived(data.items.reduce((sum, item) => sum + item.quantity, 0));
 </script>
 
-<div class="mx-auto max-w-5xl p-6">
-  <!-- Header -->
-  <div class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold">My Cart</h1>
+<div class="container mx-auto max-w-6xl p-6">
+	<!-- Header -->
+	<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+		<div>
+			<h1 class="text-3xl font-bold tracking-tight">Shopping Cart</h1>
+			<p class="mt-1 text-sm text-muted-foreground">
+				{data.items.length === 0
+					? 'Your cart is empty'
+					: `${totalItems} ${totalItems === 1 ? 'item' : 'items'} in your cart`}
+			</p>
+		</div>
 
-    <a
-      href="/products"
-      class="rounded-md border px-4 py-2 text-sm hover:bg-gray-50"
-    >
-      Continue shopping
-    </a>
-  </div>
+		<Button variant="outline" href="/products" class="w-full sm:w-auto">
+			<ArrowLeft class="mr-2 h-4 w-4" />
+			Continue Shopping
+		</Button>
+	</div>
 
-  {#if data.items.length === 0}
-    <p class="text-gray-500">Your cart is empty.</p>
-  {:else}
-    <!-- Cart Table -->
-    <div class="overflow-hidden rounded-lg border">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-left">
-          <tr>
-            <th class="p-4">Product</th>
-            <th class="p-4">Price</th>
-            <th class="p-4">Quantity</th>
-            <th class="p-4">Subtotal</th>
-            <th class="p-4"></th>
-          </tr>
-        </thead>
+	{#if data.items.length === 0}
+		<!-- Empty State -->
+		<Card class="border-dashed">
+			<CardContent class="flex flex-col items-center justify-center py-16">
+				<div class="mb-4 rounded-full bg-muted p-4">
+					<ShoppingBag class="h-12 w-12 text-muted-foreground" />
+				</div>
+				<h3 class="mb-2 text-lg font-semibold">Your cart is empty</h3>
+				<p class="mb-6 text-sm text-muted-foreground">Add items to your cart to get started</p>
+				<Button href="/products">Browse Products</Button>
+			</CardContent>
+		</Card>
+	{:else}
+		<div class="grid gap-6 lg:grid-cols-3">
+			<!-- Cart Items -->
+			<div class="lg:col-span-2">
+				<Card>
+					<CardHeader>
+						<CardTitle>Cart Items</CardTitle>
+					</CardHeader>
+					<CardContent class="p-0">
+						<div class="divide-y">
+							{#each data.items as item, index (item.cartItemId)}
+								<div class="p-6 transition-colors hover:bg-muted/50">
+									<div class="flex gap-4">
+										<!-- Product Image -->
+										<div class="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-muted">
+											{#if item}
+												<img
+													src="https://www.wirelessplace.com/cdn/shop/files/redmi_note_14_pro-3_700x700.png?v=1748488010"
+													alt={item.name}
+													class="h-full w-full object-cover"
+												/>
+											{:else}
+												<div class="flex h-full w-full items-center justify-center">
+													<ShoppingBag class="h-8 w-8 text-muted-foreground" />
+												</div>
+											{/if}
+										</div>
 
-        <tbody>
-          {#each data.items as item}
-            <tr class="border-t">
-              <!-- Product -->
-              <td class="p-4 font-medium flex gap-2 items-center">
-                <div class="product-image w-16 h-16 rounded-md overflow-hidden">
-                    <img src="https://sc04.alicdn.com/kf/Hd47e3d23df064c6089bc577076491ab1V.png" class="w-full h-full object-fit" alt="placeholder">
-                </div>
-                <h3>{item.name}</h3>
-              </td>
+										<!-- Product Details -->
+										<div class="flex flex-1 flex-col justify-between">
+											<div class="flex justify-between gap-4">
+												<div class="flex-1">
+													<h3 class="leading-tight font-semibold">
+														{item.name}
+													</h3>
+													<p class="mt-1 text-sm text-muted-foreground">
+														{formatPrice(item.price)}
+													</p>
 
-              <!-- Price -->
-              <td class="p-4">
-                Rp {item.price.toLocaleString()}
-              </td>
+													{#if item.quantity !== undefined}
+														<Badge variant="secondary" class="mt-2 text-xs">
+															Only {item.stock} left
+														</Badge>
+													{/if}
+												</div>
 
-              <!-- Quantity -->
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <form method="POST" action="?/decrease" >
-                    <input type="hidden" name="cartItemId" value={item.cartItemId} />
-                    <button
-                      type="submit"
-                      class="h-8 w-8 rounded border hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-                      disabled={item.quantity <= 1}
-                    >
-                      −
-                    </button>
-                  </form>
+												<div class="text-right">
+													<p class="font-semibold">
+														{formatPrice(item.price * item.quantity)}
+													</p>
+												</div>
+											</div>
 
-                  <span class="w-6 text-center">
-                    {item.quantity}
-                  </span>
+											<!-- Quantity Controls & Remove -->
+											<div class="flex items-center justify-between">
+												<div class="flex items-center gap-2">
+													<form method="POST" action="?/decrease" use:enhance>
+														<input type="hidden" name="cartItemId" value={item.cartItemId} />
+														<Button
+															type="submit"
+															variant="outline"
+															size="icon"
+															class="h-8 w-8"
+															disabled={item.quantity <= 1}
+														>
+															<Minus class="h-4 w-4" />
+														</Button>
+													</form>
 
-                  <form method="POST" action="?/increase">
-                    <input type="hidden" name="cartItemId" value={item.cartItemId} />
-                    <button
-                      type="submit"
-                      class="h-8 w-8 rounded border hover:bg-gray-100"
-                    >
-                      +
-                    </button>
-                  </form>
-                </div>
-              </td>
+													<span class="w-12 text-center font-medium">
+														{item.quantity}
+													</span>
 
-              <!-- Subtotal -->
-              <td class="p-4 font-medium">
-                Rp {(item.price * item.quantity).toLocaleString()}
-              </td>
+													<form method="POST" action="?/increase" use:enhance>
+														<input type="hidden" name="cartItemId" value={item.cartItemId} />
+														<Button
+															type="submit"
+															variant="outline"
+															size="icon"
+															class="h-8 w-8"
+															disabled={item.quantity !== undefined && item.quantity >= item.stock}
+														>
+															<Plus class="h-4 w-4" />
+														</Button>
+													</form>
+												</div>
 
-              <!-- Remove -->
-              <td class="p-4">
-                <form method="POST" action="?/remove">
-                  <input type="hidden" name="cartItemId" value={item.cartItemId} />
-                  <button
-                    type="submit"
-                    class="text-gray-400 hover:text-red-600"
-                  >
-                    <TrashIcon class="h-5 w-5" />
-                  </button>
-                </form>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    </div>
+												<form method="POST" action="?/remove" use:enhance>
+													<input type="hidden" name="cartItemId" value={item.cartItemId} />
+													<Button
+														type="submit"
+														variant="ghost"
+														size="icon"
+														class="h-8 w-8 text-muted-foreground hover:text-destructive"
+													>
+														<Trash2 class="h-4 w-4" />
+														<span class="sr-only">Remove item</span>
+													</Button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							{/each}
+						</div>
+					</CardContent>
+				</Card>
+			</div>
 
-    <!-- Summary -->
-    <div class="mt-6 flex justify-end">
-      <div class="w-full max-w-sm rounded-lg border p-4">
-        <div class="mb-4 flex justify-between text-sm">
-          <span>Total</span>
-          <span class="font-semibold">
-            Rp {data.total.toLocaleString()}
-          </span>
-        </div>
+			<!-- Order Summary -->
+			<div class="lg:col-span-1">
+				<Card class="sticky top-6">
+					<CardHeader>
+						<CardTitle>Order Summary</CardTitle>
+					</CardHeader>
+					<CardContent class="space-y-4">
+						<div class="space-y-2">
+							<div class="flex justify-between text-sm">
+								<span class="text-muted-foreground">Subtotal</span>
+								<span>{formatPrice(data.total)}</span>
+							</div>
+							<div class="flex justify-between text-sm">
+								<span class="text-muted-foreground">Shipping</span>
+								<span class="text-muted-foreground">Calculated at checkout</span>
+							</div>
+						</div>
 
-        <Button href="/checkout" class="w-full">
-          Checkout
-        </Button>
-      </div>
-    </div>
-  {/if}
+						<Separator />
+
+						<div class="flex justify-between">
+							<span class="font-semibold">Total</span>
+							<span class="text-lg font-bold">
+								{formatPrice(data.total)}
+							</span>
+						</div>
+
+						<div class="space-y-2 text-xs text-muted-foreground">
+							<p>• Taxes calculated at checkout</p>
+							<p>• Free shipping on orders over Rp 500,000</p>
+						</div>
+					</CardContent>
+					<CardFooter class="flex-col gap-2">
+						<Button href="/checkout" class="w-full" size="lg">Proceed to Checkout</Button>
+						<Button variant="outline" href="/products" class="w-full">Continue Shopping</Button>
+					</CardFooter>
+				</Card>
+			</div>
+		</div>
+	{/if}
 </div>
