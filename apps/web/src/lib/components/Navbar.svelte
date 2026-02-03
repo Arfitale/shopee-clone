@@ -17,7 +17,7 @@
 		SheetTitle,
 		SheetTrigger
 	} from '$lib/components/ui/sheet';
-	import { ShoppingCart, User, Menu, Package, Store, Home, LogOut } from '@lucide/svelte';
+	import { ShoppingCart, User, Menu, Package, Store, House, LogOut } from '@lucide/svelte';
 
 	// Get current path for active state
 	const isActive = $derived((path: string) => {
@@ -31,7 +31,7 @@
 </script>
 
 <header
-	class="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+	class="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60"
 >
 	<div class="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
 		<!-- Logo -->
@@ -52,8 +52,8 @@
 				href="/"
 				class="gap-2"
 			>
-				<Home class="h-4 w-4" />
-				Home
+				<House class="h-4 w-4" />
+				House
 			</Button>
 
 			<Button
@@ -110,8 +110,8 @@
 					<DropdownMenuTrigger>
 						<Button variant="ghost" size="sm" class="gap-2">
 							<User class="h-4 w-4" />
-							<span class="max-w-[100px] truncate">
-								{page.data.user.name || page.data.user.email}
+							<span class="max-w-25 truncate">
+								{page.data.user.name}
 							</span>
 						</Button>
 					</DropdownMenuTrigger>
@@ -166,7 +166,7 @@
 						<span class="sr-only">Toggle menu</span>
 					</Button>
 				</SheetTrigger>
-				<SheetContent side="right" class="w-[300px] sm:w-[400px]">
+				<SheetContent side="right" class="w-75 sm:w-100">
 					<SheetHeader>
 						<SheetTitle>Menu</SheetTitle>
 					</SheetHeader>
@@ -177,8 +177,8 @@
 							class="justify-start gap-2"
 							onclick={() => (mobileMenuOpen = false)}
 						>
-							<Home class="h-4 w-4" />
-							Home
+							<House class="h-4 w-4" />
+							House
 						</Button>
 
 						<Button

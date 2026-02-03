@@ -4,6 +4,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { db, users, type User } from '$lib/db.js';
 import type { Actions } from './$types';
+import { randomId } from '$lib/utils/random-id';
 
 export const load = async ({ locals }) => {
 	if (locals.user) {
@@ -53,7 +54,8 @@ export const actions = {
 					.values({
 						email,
 						passwordHash,
-						role: 'USER'
+						role: 'USER',
+						name: `user-${randomId({ length: 6 })}`
 					})
 					.returning()
 					.then((res) => res[0]);

@@ -71,6 +71,20 @@
       "when": 1769959679558,
       "tag": "0009_lyrical_hellfire_club",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1770095286023,
+      "tag": "0010_big_mad_thinker",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1770095342290,
+      "tag": "0011_loose_exodus",
+      "breakpoints": true
     }
   ]
 }

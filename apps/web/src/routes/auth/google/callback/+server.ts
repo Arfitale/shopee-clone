@@ -3,6 +3,7 @@ import { and, eq } from 'drizzle-orm';
 import { redirect, error } from '@sveltejs/kit';
 import { googleProvider } from '$lib/server/oauth/google.js';
 import { authProviders, db, users } from '$lib/db.js';
+import { randomId } from '$lib/utils/random-id.js';
 
 export async function GET({ url, cookies, fetch }) {
 	const code = url.searchParams.get('code');
@@ -50,7 +51,8 @@ export async function GET({ url, cookies, fetch }) {
 				.insert(users)
 				.values({
 					email: googleUser.email,
-					role: 'USER'
+					role: 'USER',
+					name: googleUser.name || `user-${randomId({ length: 6 })}`
 				})
 				.returning();
 			existingUser = createdUser;

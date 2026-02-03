@@ -35,6 +35,7 @@ export const oauthProviderEnum = pgEnum("oauth_provider", [
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").notNull().unique(),
+  name: text("name").notNull().unique(),
   passwordHash: text("password_hash"),
   role: userRoleEnum("role").notNull().default("USER"),
   createdAt: createdAtNow,

@@ -17,7 +17,8 @@
   "scripts": {
     "db:generate": "cd packages/db && drizzle-kit generate",
     "db:migrate": "cd packages/db && drizzle-kit migrate",
-    "db:push": "cd packages/db && drizzle-kit push"
+    "db:push": "cd packages/db && drizzle-kit push",
+    "inspect-db": "docker exec -it shopeeapp-db-1 psql -U altanfiz -d shopee-db"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
