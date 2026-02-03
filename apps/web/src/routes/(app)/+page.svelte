@@ -29,7 +29,7 @@
 			href: '/products',
 			color: 'text-blue-600',
 			bgColor: 'bg-blue-100',
-			count: 5
+			count: () => data.productTotal ?? 0
 		},
 		{
 			icon: ShoppingCart,
@@ -46,7 +46,7 @@
 			href: '/orders',
 			color: 'text-purple-600',
 			bgColor: 'bg-purple-100',
-			count: 5
+			count: () => data.orderCount ?? 0
 		}
 	];
 
@@ -148,14 +148,13 @@
 					<div
 						class="absolute top-0 right-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-linear-to-br {feature.bgColor} opacity-20 blur-2xl transition-transform group-hover:scale-150"
 					></div>
-
 					<CardHeader>
 						<div class="mb-3 flex items-center justify-between">
 							<div class="flex h-12 w-12 items-center justify-center rounded-lg {feature.bgColor}">
 								<FeatureIcon />
 							</div>
-							{#if feature.count !== undefined}
-								<Badge variant="secondary">{feature.count}</Badge>
+							{#if feature.count !== undefined && feature.count() > 0}
+								<Badge variant="secondary">{feature.count()}</Badge>
 							{/if}
 						</div>
 						<CardTitle class="text-xl">{feature.title}</CardTitle>

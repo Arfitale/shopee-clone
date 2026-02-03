@@ -18,14 +18,13 @@
 		SheetTrigger
 	} from '$lib/components/ui/sheet';
 	import { ShoppingCart, User, Menu, Package, Store, House, LogOut } from '@lucide/svelte';
-
 	// Get current path for active state
 	const isActive = $derived((path: string) => {
 		return page.url.pathname === path || page.url.pathname.startsWith(path + '/');
 	});
 
 	// Cart item count (you can pass this from your data)
-	const cartItemCount = $derived(5);
+	const cartItemCount = $derived(page.data.cartItemCount ?? 0);
 
 	let mobileMenuOpen = $state(false);
 </script>
