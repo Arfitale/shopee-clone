@@ -52,7 +52,7 @@
 				class="gap-2"
 			>
 				<House class="h-4 w-4" />
-				House
+				Home
 			</Button>
 
 			<Button
@@ -177,7 +177,7 @@
 							onclick={() => (mobileMenuOpen = false)}
 						>
 							<House class="h-4 w-4" />
-							House
+							Home
 						</Button>
 
 						<Button
