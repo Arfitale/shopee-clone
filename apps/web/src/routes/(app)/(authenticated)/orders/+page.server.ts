@@ -51,12 +51,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions = {
 	cancelOrder: async ({ locals, request }) => {
-		const data = request.formData();
-		const orderId = (await data).get('orderId') as string;
-
 		if (!locals.user) {
 			throw redirect(303, '/');
 		}
+
+		const data = request.formData();
+		const orderId = (await data).get('orderId') as string;
 
 		if (!orderId) {
 			throw fail(500, { error: 'invalid order id' });
@@ -66,7 +66,7 @@ export const actions = {
 			await db.transaction(async (tx) => {
 				const [order] = await tx.select().from(orders).where(eq(orders.id, orderId)).for('update');
 
-				if (!order || order.userId !== locals.user.id) {
+				if (!order || order.userId !== locals.user!.id) {
 					throw new Error('Order not found');
 				}
 
