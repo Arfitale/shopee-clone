@@ -22,9 +22,10 @@ export const load = async ({ params, locals }) => {
 				quantity: cartItems.quantity
 			})
 			.from(cartItems)
-			.where(and(eq(cartItems.userId, locals.user.id), eq(cartItems.productId, items.id)));
+			.where(and(eq(cartItems.userId, locals.user.id), eq(cartItems.productId, params.id)))
+			.limit(1);
 
-		return { product: items, cartItemQuantity: cartItem.quantity };
+		return { product: items, cartItemQuantity: cartItem?.quantity || null };
 	}
 
 	return { product: items };
@@ -62,10 +63,14 @@ export const actions = {
 			.from(cartItems)
 			.where(and(eq(cartItems.userId, userId), eq(cartItems.productId, productId)));
 
-		const quantityCanBeAdded =
-			quantityAdded > product.stock - cartItem.quantity
-				? product.stock - cartItem.quantity
-				: quantityAdded;
+		let quantityCanBeAdded = quantityAdded;
+
+		if (cartItem) {
+			quantityCanBeAdded =
+				quantityAdded > product.stock - cartItem.quantity
+					? product.stock - cartItem.quantity
+					: quantityAdded;
+		}
 
 		// 3. Insert or update quantity
 		try {

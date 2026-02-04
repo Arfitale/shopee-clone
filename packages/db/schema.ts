@@ -121,6 +121,9 @@ export const orders = pgTable("orders", {
 // /* ORDER ITEMS */
 export const orderItems = pgTable("order_items", {
   id: uuid("id").defaultRandom().primaryKey(),
+  sellerId: uuid("seller_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
   orderId: uuid("order_id")
     .notNull()
     .references(() => orders.id, { onDelete: "cascade" }),

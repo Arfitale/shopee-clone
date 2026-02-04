@@ -85,6 +85,20 @@
       "when": 1770095342290,
       "tag": "0011_loose_exodus",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1770176105891,
+      "tag": "0012_glossy_maria_hill",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1770176150303,
+      "tag": "0013_early_deathbird",
+      "breakpoints": true
     }
   ]
 }

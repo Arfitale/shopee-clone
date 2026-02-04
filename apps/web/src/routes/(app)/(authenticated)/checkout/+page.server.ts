@@ -30,8 +30,6 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	confirm: async ({ locals }) => {
-		console.log(true);
-
 		if (!locals.user) {
 			throw redirect(302, '/login');
 		}
@@ -59,11 +57,12 @@ export const actions = {
 						productName: products.name,
 						price: products.price,
 						quantity: cartItems.quantity,
-						stock: products.stock
+						stock: products.stock,
+						sellerId: products.sellerId
 					})
 					.from(cartItems)
 					.innerJoin(products, eq(cartItems.productId, products.id))
-					.where(eq(cartItems.userId, locals.user.id));
+					.where(eq(cartItems.userId, locals.user!.id));
 
 				if (items.length === 0) {
 					throw new Error('Cart is empty');
@@ -87,7 +86,7 @@ export const actions = {
 				const [order] = await tx
 					.insert(orders)
 					.values({
-						userId: locals.user.id,
+						userId: locals.user!.id,
 						totalAmount: total,
 						status: 'PAID'
 					})
@@ -100,11 +99,12 @@ export const actions = {
 						productName: item.productName,
 						price: item.price,
 						quantity: item.quantity,
-						status: 'PENDING' as const
+						status: 'PENDING' as const,
+						sellerId: item.sellerId
 					}))
 				);
 
-				await tx.delete(cartItems).where(eq(cartItems.userId, locals.user.id));
+				await tx.delete(cartItems).where(eq(cartItems.userId, locals.user!.id));
 			});
 		} catch (err) {
 			console.error('Checkout failed:', err);
