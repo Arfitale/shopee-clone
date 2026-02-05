@@ -12,10 +12,10 @@ export const load = async ({ locals }) => {
 export const actions = {
 	default: async ({ request, locals }) => {
 		const data = await request.formData();
-		const productName = data.get('product-name')?.toString().trim();
-		const description = data.get('description')?.toString().trim();
-		const price = Number(data.get('price'));
-		const stock = Number(data.get('stock'));
+		const productName = data.get('productName')?.toString().trim() as string;
+		const description = data.get('description')?.toString().trim() as string;
+		const price = Number(data.get('price')) as number;
+		const stock = Number(data.get('stock')) as number;
 
 		if (!locals.user || locals.user.role !== 'SELLER') {
 			return fail(403, { error: 'Unauthorized' });
@@ -23,10 +23,10 @@ export const actions = {
 		const sellerId = locals.user.id;
 
 		// Validate input
-		if (!productName || Number.isNaN(price) || price <= 0 || Number.isNaN(stock) || stock < 0) {
-			return fail(400, { error: 'Invalid product data' });
+		const error = validateProductData(productName, price, stock);
+		if (error) {
+			return fail(error.status, error.data);
 		}
-
 		try {
 			await db.insert(products).values({
 				name: productName,
@@ -42,3 +42,25 @@ export const actions = {
 		throw redirect(302, '/products');
 	}
 } satisfies Actions;
+
+function validateProductData(productName: string, price: number, stock: number) {
+	if (!productName || productName.trim() === '') {
+		return fail(400, { error: 'Product name is required' });
+	}
+
+	if (Number.isNaN(price)) {
+		return fail(400, { error: 'Price must be a valid number' });
+	}
+
+	if (price <= 0) {
+		return fail(400, { error: 'Price must be greater than 0' });
+	}
+
+	if (Number.isNaN(stock)) {
+		return fail(400, { error: 'Stock must be a valid number' });
+	}
+
+	if (stock <= 0) {
+		return fail(400, { error: 'Stock must be greater than 0' });
+	}
+}
