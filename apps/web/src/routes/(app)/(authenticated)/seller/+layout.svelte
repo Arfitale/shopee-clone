@@ -1,21 +1,13 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
-	import {
-		LayoutDashboard,
-		Package,
-		ShoppingBag,
-		CirclePlus,
-		Menu,
-		Settings,
-		LogOut
-	} from '@lucide/svelte';
+	import { LayoutDashboard, Package, ShoppingBag, CirclePlus, Menu } from '@lucide/svelte';
 	import { page } from '$app/state';
 
 	let { data, children } = $props();
 
 	const isActive = $derived((path: string) => {
-		return page.url.pathname === path || page.url.pathname.startsWith(path + '/');
+		return page.url.pathname === path;
 	});
 
 	let mobileMenuOpen = $state(false);
@@ -67,17 +59,6 @@
 					<h1 class="text-lg font-bold">Seller Dashboard</h1>
 					<p class="text-xs text-muted-foreground">Manage your store</p>
 				</div>
-			</div>
-
-			<!-- Right Side Actions -->
-			<div class="ml-auto flex items-center gap-2">
-				<Button variant="ghost" size="icon" href="/seller/settings">
-					<Settings class="h-5 w-5" />
-				</Button>
-				<Button variant="ghost" size="sm" href="/auth/logout" class="gap-2">
-					<LogOut class="h-4 w-4" />
-					<span class="hidden sm:inline">Logout</span>
-				</Button>
 			</div>
 		</div>
 	</header>
