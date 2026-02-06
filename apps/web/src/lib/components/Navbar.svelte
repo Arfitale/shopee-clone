@@ -121,25 +121,27 @@
 						<DropdownMenuContent align="end" class="w-56">
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<User class="mr-2 h-4 w-4" />
-								Profile
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Package class="mr-2 h-4 w-4" />
-								My Orders
-							</DropdownMenuItem>
-							{#if page.data.user.role === 'SELLER'}
+							<a href="/orders">
 								<DropdownMenuItem>
-									<Store class="mr-2 h-4 w-4" />
-									Seller Dashboard
+									<Package class="mr-2 h-4 w-4" />
+									My Orders
 								</DropdownMenuItem>
+							</a>
+							{#if page.data.user.role === 'SELLER'}
+								<a href="/seller">
+									<DropdownMenuItem>
+										<Store class="mr-2 h-4 w-4" />
+										Seller Dashboard
+									</DropdownMenuItem>
+								</a>
 							{/if}
 							<DropdownMenuSeparator />
-							<DropdownMenuItem class="text-destructive">
-								<LogOut class="mr-2 h-4 w-4" />
-								Logout
-							</DropdownMenuItem>
+							<a href="/auth/logout">
+								<DropdownMenuItem class="text-destructive">
+									<LogOut class="mr-2 h-4 w-4" />
+									Logout
+								</DropdownMenuItem>
+							</a>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				{:else}
