@@ -6,6 +6,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { LogIn, User, Mail, Lock, TriangleAlert } from '@lucide/svelte';
 	import GoogleAuthButton from '$lib/components/auth/GoogleAuthButton.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 
 	let { form } = $props();
 </script>
@@ -13,10 +14,7 @@
 <div class="flex min-h-screen flex-col gap-6 bg-background p-6">
 	<!-- Header -->
 	<header class="flex items-center justify-between">
-		<div class="flex items-center gap-2 font-semibold">
-			<div class="h-6 w-6 rounded-full bg-primary"></div>
-			<span>Shopee</span>
-		</div>
+		<Logo />
 
 		<Button variant="outline" href="/login" class="gap-2 rounded-full px-5">
 			<LogIn class="h-4 w-4" />

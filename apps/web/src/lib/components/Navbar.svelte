@@ -18,6 +18,7 @@
 		SheetTrigger
 	} from '$lib/components/ui/sheet';
 	import { ShoppingCart, User, Menu, Package, Store, House, LogOut } from '@lucide/svelte';
+	import Logo from './Logo.svelte';
 	// Get current path for active state
 	const isActive = $derived((path: string) => {
 		return page.url.pathname === path || page.url.pathname.startsWith(path + '/');
@@ -35,14 +36,7 @@
 	>
 		<div class="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
 			<!-- Logo -->
-			<a href="/" class="flex items-center gap-2 transition-opacity hover:opacity-80">
-				<div
-					class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground"
-				>
-					<Store class="h-5 w-5" />
-				</div>
-				<h1 class="text-lg font-bold tracking-tight sm:text-xl">Shopee Clone</h1>
-			</a>
+			<Logo />
 
 			<!-- Desktop Navigation -->
 			<nav class="hidden items-center gap-1 md:flex">
