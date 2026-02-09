@@ -139,9 +139,9 @@
 							>
 								<item.icon class="h-5 w-5" />
 								{item.label}
-								{#if item.badge}
+								{#if item.badge && item.badge() > 0}
 									<Badge variant="destructive" class="ml-auto">
-										{item.badge}
+										{item.badge()}
 									</Badge>
 								{/if}
 							</a>

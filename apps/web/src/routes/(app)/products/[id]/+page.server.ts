@@ -46,7 +46,7 @@ export const actions = {
 
 		// 2. Ensure product exists (optional but recommended)
 		const product = await db
-			.select({ id: products.id, stock: products.stock })
+			.select({ id: products.id, stock: products.stock, name: products.name })
 			.from(products)
 			.where(eq(products.id, productId))
 			.limit(1)
@@ -92,7 +92,9 @@ export const actions = {
 			return fail(500, { error: 'Failed to add to cart' });
 		}
 
-		// 4. Redirect (MVP choice)
-		throw redirect(302, '/cart');
+		return {
+			success: true,
+			message: `${product.name} successfully added to cart`
+		};
 	}
 };

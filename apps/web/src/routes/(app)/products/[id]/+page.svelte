@@ -12,10 +12,11 @@
 		Truck,
 		Shield,
 		RefreshCw,
-		CheckCircle2,
 		Info
 	} from '@lucide/svelte';
 	import { enhance } from '$app/forms';
+	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data, form } = $props();
 
@@ -275,10 +276,14 @@
 										action="?/addToCart"
 										use:enhance={() => {
 											isAdding = true;
-											return async ({ update }) => {
+											return async ({ update, result }) => {
 												await update();
-												isAdding = false;
-												quantity = 1;
+												if (result.type === 'success') {
+													isAdding = false;
+													quantity = 1;
+													toast.success(result.data?.message as string);
+													goto('/cart');
+												}
 											};
 										}}
 									>
