@@ -1,6 +1,6 @@
 import { db, orderItems, products, users } from '$lib/db.js';
 import { redirect } from '@sveltejs/kit';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, ne } from 'drizzle-orm';
 
 export const load = async ({ locals }) => {
 	if (!locals.user) throw redirect(302, '/login');
@@ -20,7 +20,10 @@ export const load = async ({ locals }) => {
 	}
 
 	const productCount = await db.$count(products, eq(products.sellerId, seller.id));
-	const orderItemCount = await db.$count(orderItems, eq(orderItems.sellerId, seller.id));
+	const orderItemCount = await db.$count(
+		orderItems,
+		and(eq(orderItems.sellerId, seller.id), ne(orderItems.status, 'CANCELLED'))
+	);
 
 	return {
 		seller,
