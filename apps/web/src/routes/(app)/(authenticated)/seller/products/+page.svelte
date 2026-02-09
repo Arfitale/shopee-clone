@@ -93,11 +93,11 @@
 					{@const stockStatus = getStockStatus(product.stock)}
 					<Card class="overflow-hidden transition-shadow hover:shadow-lg">
 						<div class="relative aspect-square bg-muted">
-							{#if product}
+							{#if product.imageUrl}
 								<img
-									src={'https://www.wirelessplace.com/cdn/shop/files/redmi_note_14_pro-3_700x700.png?v=1748488010'}
+									src={product.imageUrl}
 									alt={product.name}
-									class="h-full w-full object-cover"
+									class="h-full w-full object-contain"
 								/>
 							{:else}
 								<div class="flex h-full w-full items-center justify-center">

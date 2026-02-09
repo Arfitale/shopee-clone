@@ -15,7 +15,8 @@ export const load = async ({ locals }) => {
 			name: products.name,
 			price: products.price,
 			quantity: cartItems.quantity,
-			stock: products.stock
+			stock: products.stock,
+			imageUrl: products.imageUrl
 		})
 		.from(cartItems)
 		.innerJoin(products, eq(cartItems.productId, products.id))

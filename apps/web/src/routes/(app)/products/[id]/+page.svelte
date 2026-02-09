@@ -101,11 +101,11 @@
 				<div class="space-y-4">
 					<Card class="overflow-hidden">
 						<div class="relative aspect-square bg-muted">
-							{#if data.product}
+							{#if data.product.imageUrl}
 								<img
-									src={'https://www.wirelessplace.com/cdn/shop/files/redmi_note_14_pro-3_700x700.png?v=1748488010'}
+									src={data.product.imageUrl}
 									alt={data.product.name}
-									class="h-full w-full object-cover"
+									class="h-full w-full object-contain"
 								/>
 							{:else}
 								<div

@@ -86,6 +86,7 @@ export const products = pgTable("products", {
   price: integer("price").notNull(),
   stock: integer("stock").notNull(),
   isActive: boolean("is_active").default(true).notNull(),
+  imageUrl: text("image_url"),
   createdAt: createdAtNow,
 });
 

@@ -99,6 +99,13 @@
       "when": 1770176150303,
       "tag": "0013_early_deathbird",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1770364492022,
+      "tag": "0014_dry_iron_fist",
+      "breakpoints": true
     }
   ]
 }

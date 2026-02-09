@@ -64,11 +64,11 @@
 									<div class="flex gap-4">
 										<!-- Product Image -->
 										<div class="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-muted">
-											{#if item}
+											{#if item.imageUrl}
 												<img
-													src="https://www.wirelessplace.com/cdn/shop/files/redmi_note_14_pro-3_700x700.png?v=1748488010"
+													src={item.imageUrl}
 													alt={item.name}
-													class="h-full w-full object-cover"
+													class="h-full w-full object-contain"
 												/>
 											{:else}
 												<div class="flex h-full w-full items-center justify-center">

@@ -7,7 +7,8 @@ export const load = async () => {
 			id: products.id,
 			name: products.name,
 			price: products.price,
-			stock: products.stock
+			stock: products.stock,
+			imageUrl: products.imageUrl
 		})
 		.from(products)
 		.where(and(eq(products.isActive, true), gt(products.stock, 0)));

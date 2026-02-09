@@ -240,9 +240,9 @@
 										<div
 											class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-muted"
 										>
-											{#if item}
+											{#if item.imageUrl}
 												<img
-													src="https://www.wirelessplace.com/cdn/shop/files/redmi_note_14_pro-3_700x700.png?v=1748488010"
+													src={item.imageUrl}
 													alt={item.name}
 													class="h-full w-full rounded-md object-cover"
 												/>

@@ -18,7 +18,7 @@
     "db:generate": "cd packages/db && drizzle-kit generate",
     "db:migrate": "cd packages/db && drizzle-kit migrate",
     "db:push": "cd packages/db && drizzle-kit push",
-    "inspect-db": "docker exec -it shopeeapp-db-1 psql -U altanfiz -d shopee-db"
+    "db:inspect": "docker exec -it shopeeapp-db-1 psql -U altanfiz -d shopee-db"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
@@ -27,6 +27,7 @@
     "arctic": "^3.7.0",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.6.2",
+    "cloudinary": "^2.9.0",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.8",

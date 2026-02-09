@@ -67,11 +67,11 @@
 						<CardContent class="p-4">
 							<!-- Image -->
 							<div class="relative mb-3 aspect-square overflow-hidden rounded-lg bg-muted">
-								{#if product}
+								{#if product.imageUrl}
 									<img
-										src="https://www.wirelessplace.com/cdn/shop/files/redmi_note_14_pro-3_700x700.png?v=1748488010"
+										src={product.imageUrl}
 										alt={product.name}
-										class="h-full w-full object-cover transition-transform group-hover:scale-105"
+										class="h-full w-full object-contain transition-transform group-hover:scale-105"
 									/>
 								{:else}
 									<div class="flex h-full w-full items-center justify-center text-muted-foreground">

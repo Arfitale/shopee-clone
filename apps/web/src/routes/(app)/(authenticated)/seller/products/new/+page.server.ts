@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { db, products } from '$lib/db';
+import cloudinary from '$lib/server/cloudinary';
 
 export const load = async ({ locals }) => {
 	const user = await locals.user;
@@ -12,10 +13,30 @@ export const load = async ({ locals }) => {
 export const actions = {
 	default: async ({ request, locals }) => {
 		const data = await request.formData();
-		const productName = data.get('productName')?.toString().trim() as string;
+		const productName = data.get('product-name')?.toString().trim() as string;
 		const description = data.get('description')?.toString().trim() as string;
 		const price = Number(data.get('price')) as number;
 		const stock = Number(data.get('stock')) as number;
+		const imageFile = data.get('product-image') as File | null;
+		let imageUrl: string | null = null;
+
+		if (!(imageFile instanceof File)) {
+			return fail(403, { error: 'Error uploading image' });
+		}
+
+		if (imageFile && imageFile.size > 0) {
+			const buffer = Buffer.from(await imageFile.arrayBuffer());
+			const result = await new Promise<any>((resolve, reject) => {
+				cloudinary.uploader
+					.upload_stream({ folder: 'products' }, (error, result) => {
+						console.log(true);
+						if (error) reject(error);
+						else resolve(result);
+					})
+					.end(buffer);
+			});
+			imageUrl = result.secure_url;
+		}
 
 		if (!locals.user || locals.user.role !== 'SELLER') {
 			return fail(403, { error: 'Unauthorized' });
@@ -33,7 +54,8 @@ export const actions = {
 				description,
 				price: Number(price),
 				sellerId,
-				stock: stock
+				stock: stock,
+				imageUrl
 			});
 		} catch (err) {
 			console.log('error happen', err);
