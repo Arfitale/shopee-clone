@@ -1,16 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
-	import {
-		Card,
-		CardContent,
-		CardDescription,
-		CardHeader,
-		CardTitle
-	} from '$lib/components/ui/card';
+	import { Card, CardContent } from '$lib/components/ui/card';
 	import { Separator } from '$lib/components/ui/separator';
-	import { Alert, AlertDescription } from '$lib/components/ui/alert';
-	import { Select, SelectContent, SelectItem, SelectTrigger } from '$lib/components/ui/select';
+
 	import {
 		Package,
 		ShoppingBag,
@@ -18,14 +11,13 @@
 		CircleX,
 		Clock,
 		Truck,
-		CircleAlert,
 		Filter,
 		Search,
 		Calendar
 	} from '@lucide/svelte';
 	import { enhance } from '$app/forms';
 
-	let { data, form } = $props();
+	let { data } = $props();
 
 	const formatPrice = (price: number) => {
 		return new Intl.NumberFormat('id-ID', {
@@ -263,7 +255,7 @@
 											>
 										</p>
 										<p class="text-muted-foreground">
-											Buyer: <span class="font-medium text-foreground">buyer@email.com</span>
+											Buyer: <span class="font-medium text-foreground">{item.buyerName}</span>
 										</p>
 									</div>
 									<div class="text-right">

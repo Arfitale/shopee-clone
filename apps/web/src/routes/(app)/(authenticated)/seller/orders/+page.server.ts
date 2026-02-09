@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { db } from '$lib/db';
+import { db, users } from '$lib/db';
 import { orderItems, orders, products } from '$lib/db';
 import { eq, desc, sql } from 'drizzle-orm';
 import { syncOrderStatus } from '$lib/db';
@@ -19,11 +19,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 			quantity: orderItems.quantity,
 			price: orderItems.price,
 			status: orderItems.status,
-			createdAt: orders.createdAt
+			createdAt: orders.createdAt,
+			buyerName: users.name
 		})
 		.from(orderItems)
 		.innerJoin(products, eq(orderItems.productId, products.id))
 		.innerJoin(orders, eq(orderItems.orderId, orders.id))
+		.innerJoin(users, eq(users.id, orders.userId))
 		.where(eq(products.sellerId, locals.user.id))
 		.orderBy(desc(orders.createdAt));
 
