@@ -23,6 +23,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@auth/sveltekit": "^1.11.1",
+    "@neondatabase/serverless": "^1.0.2",
     "add": "^2.0.6",
     "arctic": "^3.7.0",
     "bcrypt": "^6.0.0",

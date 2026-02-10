@@ -5,7 +5,7 @@ CREATE TABLE "products" (
 	"description" text,
 	"price" integer NOT NULL,
 	"stock" integer NOT NULL,
-	"is_active" integer DEFAULT 1 NOT NULL,
+	"is_active" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint

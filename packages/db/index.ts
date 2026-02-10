@@ -1,18 +1,32 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle as drizzlePg } from "drizzle-orm/postgres-js";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 
-// Import everything from schema
+import postgres from "postgres";
+import { neon } from "@neondatabase/serverless";
 import * as schema from "./schema";
 
-export function createDb(connectionString: string) {
+const environment = process.env.NODE_ENV ?? "DEVELOPMENT";
+
+// Import everything from schema
+export function createDbPg(connectionString: string) {
   const client = postgres(connectionString, {
     max: 1,
   });
 
-  return drizzle(client, { schema });
+  return drizzlePg(client, { schema });
 }
 
-export const db = createDb(process.env.DATABASE_URL!);
+export function createDbNeon(connectionString: string) {
+  const neonClient = neon(connectionString);
+  return drizzleNeon(neonClient, { schema });
+}
+
+export function createDb(connectionString: string) {
+  return createDbNeon(connectionString);
+}
+
+export const db = createDbPg(process.env.NEON_CONNECTION!);
+export const neonDb = createDbNeon(process.env.NEON_CONNECTION!);
 
 // Re-export schema properly
 export * from "./schema";
