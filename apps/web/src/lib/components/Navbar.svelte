@@ -19,6 +19,9 @@
 	} from '$lib/components/ui/sheet';
 	import { ShoppingCart, User, Menu, Package, Store, House, LogOut } from '@lucide/svelte';
 	import Logo from './Logo.svelte';
+	import ModeWatcherToggler from './ModeWatcherToggler.svelte';
+	import { mode } from 'mode-watcher';
+
 	// Get current path for active state
 	const isActive = $derived((path: string) => {
 		return page.url.pathname === path || page.url.pathname.startsWith(path + '/');
@@ -101,6 +104,8 @@
 							Seller
 						</Button>
 					{/if}
+
+					<ModeWatcherToggler />
 
 					<!-- User Dropdown -->
 					<DropdownMenu>
@@ -279,6 +284,15 @@
 									Register
 								</Button>
 							{/if}
+
+							<div class="my-4 border-t"></div>
+
+							<div class="px-3 py-2">
+								<div class="flex items-center gap-2">
+									<ModeWatcherToggler />
+									<p class="text-sm font-medium">Change appereance</p>
+								</div>
+							</div>
 						</nav>
 					</SheetContent>
 				</Sheet>
