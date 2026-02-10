@@ -5,19 +5,19 @@ import { db, sessions, users } from '$lib/db';
 
 // Create adapter with both tables
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
+const isProd = process.env.NODE_ENV === 'production';
 
 export const lucia = new Lucia(adapter, {
 	sessionCookie: {
 		attributes: {
-			secure: process.env.NODE_ENV === 'production'
+			secure: isProd,
+			sameSite: isProd ? 'none' : 'lax'
 		}
 	},
-	getUserAttributes: (attributes) => {
-		return {
-			email: attributes.email,
-			role: attributes.role
-		};
-	}
+	getUserAttributes: (attributes) => ({
+		email: attributes.email,
+		role: attributes.role
+	})
 });
 
 declare module 'lucia' {
